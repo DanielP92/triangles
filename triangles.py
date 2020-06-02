@@ -33,7 +33,7 @@ class TriangleSprite(pg.sprite.Sprite):
         self.draw()
 
     def draw(self):
-        # draw triangle; draws opposite angle, then right angle, then adjacent angle (angles are calculated using two parameters)
+        # draw triangle; draws at right angle, then opposite angle, then adjacent angle coordinates
         pg.gfxdraw.aatrigon(self.image, 0, int(self.triangle.sides['opposite']), 0, 0,
                             int(self.triangle.sides['adjacent']), int(self.triangle.sides['opposite']), BACKGROUND_COLOUR)
 
@@ -47,7 +47,7 @@ class TriangleSprite(pg.sprite.Sprite):
         # draw opposite angle arc; same as above but for the opposite point/side
         pg.gfxdraw.aacircle(self.image, 0, 0, int(self.triangle.sides['opposite'] / 6), BACKGROUND_COLOUR)
 
-        # draw right angle box; draws a square the size of box_size, coordinates offset by -1
+        # draw right angle box; draws a square the size of box_size at right anglte point, coordinates offset by -1
         box_size = int(min(self.triangle.sides['opposite'] / 4.5, self.triangle.sides['adjacent'] / 4.5, 30))  # = shortest side / 4.5 or 48, whichever is smaller
         pg.gfxdraw.rectangle(self.image, (-1, int(self.triangle.sides['opposite'] - (box_size - 1)), box_size, box_size), BACKGROUND_COLOUR)
 
