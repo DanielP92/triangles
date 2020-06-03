@@ -61,6 +61,8 @@ class TriangleSprite(pg.sprite.Sprite):
         screen.blit(self.labels['opp'].image, (0, screen.get_height() / 2))
         screen.blit(self.labels['adj'].image, ((screen.get_width() / 2) - (self.labels['adj'].image.get_width() / 2), (screen.get_height() - 35)))
         screen.blit(self.labels['hyp'].image, ((screen.get_width() / 2 - (self.labels['hyp'].image.get_width() / 2), screen.get_height() / 2.5)))
+        screen.blit(self.labels['adj_angle'].image, (screen.get_width() - self.labels['adj_angle'].image.get_width(), screen.get_height() - self.labels['adj_angle'].image.get_height()))
+        screen.blit(self.labels['opp_angle'].image, (0, 0))
 
     def draw(self):
         # draw triangle; draws at right angle, then opposite angle, then adjacent angle coordinates
