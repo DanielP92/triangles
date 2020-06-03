@@ -30,7 +30,7 @@ LABEL_FONT = pg.font.Font(os.path.join(CURRENT_DIR, 'Exo2-Medium.ttf'), 16)
 class Label(pg.sprite.Sprite):
     def __init__(self, display_value):
         super().__init__()
-        self.image = LABEL_FONT.render(str(display_value), True, LOWLIGHT_COLOUR)
+        self.image = LABEL_FONT.render(str(round(display_value, 2)), True, LOWLIGHT_COLOUR)
 
 
 class TriangleSprite(pg.sprite.Sprite):
@@ -60,7 +60,9 @@ class TriangleSprite(pg.sprite.Sprite):
         screen = self.label_image
         screen.blit(self.labels['opp'].image, (0, screen.get_height() / 2))
         screen.blit(self.labels['adj'].image, ((screen.get_width() / 2) - (self.labels['adj'].image.get_width() / 2), (screen.get_height() - 35)))
-        screen.blit(self.labels['hyp'].image, ((screen.get_width() / 2 - (self.labels['hyp'].image.get_width() / 2), screen.get_height() / 2.5)))
+        screen.blit(self.labels['hyp'].image, ((screen.get_width() / 2 - (self.labels['hyp'].image.get_width() / 3), screen.get_height() / 2.5)))
+        screen.blit(self.labels['adj_angle'].image, (screen.get_width() - self.labels['adj_angle'].image.get_width(), screen.get_height() - self.labels['adj_angle'].image.get_height()))
+        screen.blit(self.labels['opp_angle'].image, (0, 0))
 
     def draw(self):
         # draw triangle; draws at right angle, then opposite angle, then adjacent angle coordinates
