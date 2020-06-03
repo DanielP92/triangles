@@ -22,6 +22,16 @@ SOHCAHTOAH = {math.asin: ['opposite', 'hypotenuse'],
 SCREEN_W = 1200
 SCREEN_H = 800
 
+pg.init()
+
+LABEL_FONT = pg.font.Font(os.path.join(CURRENT_DIR, 'Exo2-Medium.ttf'), 16)
+
+
+class Label(pg.sprite.Sprite):
+    def __init__(self, display_value):
+        super().__init__()
+        self.image = LABEL_FONT.render(str(display_value), True, LOWLIGHT_COLOUR)
+
 
 class TriangleSprite(pg.sprite.Sprite):
     def __init__(self, triangle):
@@ -29,8 +39,28 @@ class TriangleSprite(pg.sprite.Sprite):
         self.triangle = triangle
         self.image = pg.Surface((int(self.triangle.sides['adjacent']), int(self.triangle.sides['opposite'])), pg.SRCALPHA, 32)
 
+        sides = self.triangle.sides
+        angles = self.triangle.angles
+        self.labels = {'opp': Label(sides['opposite']),
+                       'adj': Label(sides['adjacent']),
+                       'hyp': Label(sides['hypotenuse']),
+                       'adj_angle': Label(angles['opposite']),
+                       'opp_angle': Label(angles['adjacent']),
+                       }
+        self.label_image = pg.Surface((self.image.get_width() + 75, self.image.get_height() + 75), pg.SRCALPHA, 32)
+
     def update(self):
         self.draw()
+        self.draw_labels()
+
+    def get_label_image_pos(self):
+        return ((SCREEN_W / 2 - self.label_image.get_width() / 2), (SCREEN_H / 2 - self.label_image.get_height() / 2))
+
+    def draw_labels(self):
+        screen = self.label_image
+        screen.blit(self.labels['opp'].image, (0, screen.get_height() / 2))
+        screen.blit(self.labels['adj'].image, ((screen.get_width() / 2) - (self.labels['adj'].image.get_width() / 2), (screen.get_height() - 35)))
+        screen.blit(self.labels['hyp'].image, ((screen.get_width() / 2 - (self.labels['hyp'].image.get_width() / 2), screen.get_height() / 2.5)))
 
     def draw(self):
         # draw triangle; draws at right angle, then opposite angle, then adjacent angle coordinates
@@ -115,6 +145,7 @@ class Game:
         self.done = False
         self.clock = pg.time.Clock()
         self.triangle = RightAngleTriangle(opp=400, adj=400)
+
         for key, value in self.triangle.__dict__.items():
             print({key: value})
 
@@ -126,6 +157,7 @@ class Game:
 
             self.screen.fill(BACKGROUND_COLOUR)
             self.screen.blit(self.triangle.sprite.image, self.triangle.get_position())
+            self.screen.blit(self.triangle.sprite.label_image, self.triangle.sprite.get_label_image_pos())
             self.triangle.sprite.update()
             pg.display.update()
             self.clock.tick(30)
