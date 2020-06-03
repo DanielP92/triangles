@@ -1,6 +1,7 @@
 # pylint: disable=C0301,I1101,C0116,E1101
 import math
 import os
+import random
 import pygame as pg
 import pygame.gfxdraw
 
@@ -28,9 +29,9 @@ LABEL_FONT = pg.font.Font(os.path.join(CURRENT_DIR, 'Exo2-Medium.ttf'), 16)
 
 
 class Label(pg.sprite.Sprite):
-    def __init__(self, display_value):
+    def __init__(self, display_value, unit):
         super().__init__()
-        self.image = LABEL_FONT.render(str(round(display_value, 2)), True, LOWLIGHT_COLOUR)
+        self.image = LABEL_FONT.render(str(round(display_value, 2)) + unit, True, LOWLIGHT_COLOUR)
 
 
 class TriangleSprite(pg.sprite.Sprite):
@@ -41,11 +42,11 @@ class TriangleSprite(pg.sprite.Sprite):
 
         sides = self.triangle.sides
         angles = self.triangle.angles
-        self.labels = {'opp': Label(sides['opposite']),
-                       'adj': Label(sides['adjacent']),
-                       'hyp': Label(sides['hypotenuse']),
-                       'adj_angle': Label(angles['opposite']),
-                       'opp_angle': Label(angles['adjacent']),
+        self.labels = {'opp': Label(sides['opposite'], self.triangle.units),
+                       'adj': Label(sides['adjacent'], self.triangle.units),
+                       'hyp': Label(sides['hypotenuse'], self.triangle.units),
+                       'adj_angle': Label(angles['opposite'], "'"),
+                       'opp_angle': Label(angles['adjacent'], "'"),
                        }
         self.label_image = pg.Surface((self.image.get_width() + 75, self.image.get_height() + 75), pg.SRCALPHA, 32)
 
@@ -85,10 +86,17 @@ class TriangleSprite(pg.sprite.Sprite):
 
 
 class RightAngleTriangle():
+    unit_list = ['mm', 'cm', 'm']
     max_degrees = 180
 
-    def __init__(self, opp=None, adj=None, hyp=None):
+    def __init__(self, opp=None, adj=None, hyp=None, units=None):
         super().__init__()
+
+        if units not in self.unit_list:
+            self.units = random.choice(self.unit_list)
+        else:
+            self.units = units
+
         self.sides = {'opposite': opp,
                       'adjacent': adj,
                       'hypotenuse': hyp}
@@ -100,6 +108,7 @@ class RightAngleTriangle():
                        'right-angle': 90}
 
         self.complete_all()
+
         self.area = (self.sides['opposite'] * self.sides['adjacent']) / 2
         self.perimeter = round(sum(x for x in self.sides.values()), 2)
         self.sprite = TriangleSprite(self)
