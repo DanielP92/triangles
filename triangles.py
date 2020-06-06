@@ -45,8 +45,8 @@ class TriangleSprite(pg.sprite.Sprite):
         self.labels = {'opp': Label(sides['opposite'], self.triangle.units),
                        'adj': Label(sides['adjacent'], self.triangle.units),
                        'hyp': Label(sides['hypotenuse'], self.triangle.units),
-                       'adj_angle': Label(angles['opposite'], "'"),
-                       'opp_angle': Label(angles['adjacent'], "'"),
+                       'adj_angle': Label(angles['adjacent'], "'"),
+                       'opp_angle': Label(angles['opposite'], "'"),
                        }
         self.label_image = pg.Surface((self.image.get_width() + 75, self.image.get_height() + 75), pg.SRCALPHA, 32)
 
@@ -136,7 +136,7 @@ class RightAngleTriangle():
 
         for key, value in SOHCAHTOAH.items():
             if value == list(given_sides.keys()):
-                return round(math.degrees(key(given_sides[value[0]] / given_sides[value[1]])), 2)  # given_sides[value[ints]] = names of sides of triangle = length of side (dict value); key = relevant trigonometric function
+                return round(math.degrees(key(given_sides[value[0]] / given_sides[value[1]])), 2)  # given_sides[value[ints]] = length of given sides of triangle; key = relevant trigonometric function
 
     def find_opp_angle(self):
         return self.angles['right-angle'] - self.angles['adjacent']
